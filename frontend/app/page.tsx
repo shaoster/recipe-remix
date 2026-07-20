@@ -1,34 +1,32 @@
 import Link from "next/link";
-import { checkBackendHealth } from "@/lib/api";
+import { fetchRecipes } from "@/lib/api";
+import CreateRecipeForm from "./_components/CreateRecipeForm";
 
 export default async function Home() {
-  const backendOk = await checkBackendHealth();
+  const recipes = await fetchRecipes();
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-center gap-6 py-32 px-16 bg-white dark:bg-black text-center">
-        <h1 className="text-3xl font-semibold tracking-tight text-black dark:text-zinc-50">
-          Recipe Remix Tree
-        </h1>
-        <p className="max-w-md text-zinc-600 dark:text-zinc-400">
-          This is the scaffold&apos;s Screen 1 (recipe list). Build it out per{" "}
-          <code>README.md</code>.
-        </p>
-        <p className="text-sm">
-          Backend health check:{" "}
-          <span className={backendOk ? "text-green-600" : "text-red-600"}>
-            {backendOk ? "connected ✓" : "not reachable — is the Django server running?"}
-          </span>
-        </p>
-        <div className="flex gap-4 text-sm">
-          <Link href="/recipes/1" className="underline">
-            Sample detail screen →
-          </Link>
-          <Link href="/recipes/1/remix" className="underline">
-            Sample remix screen →
-          </Link>
-        </div>
-      </main>
+    <div className="flex flex-col flex-1 items-center gap-10 bg-zinc-50 dark:bg-black px-6 py-16">
+      <h1 className="text-3xl font-semibold tracking-tight">Recipe Remix Tree</h1>
+
+      <ul className="flex flex-col gap-2 w-full max-w-md">
+        {recipes.map((recipe) => (
+          <li key={recipe.id}>
+            <Link
+              href={`/recipes/${recipe.id}`}
+              className="flex items-baseline justify-between border border-zinc-200 dark:border-zinc-800 rounded px-4 py-3 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+            >
+              <span>{recipe.title}</span>
+              <span className="text-sm text-zinc-500">by {recipe.author}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      <section className="flex flex-col items-center gap-3 w-full max-w-md">
+        <h2 className="text-lg font-medium">Add a new recipe</h2>
+        <CreateRecipeForm />
+      </section>
     </div>
   );
 }
