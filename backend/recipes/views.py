@@ -95,10 +95,11 @@ def recipe_remix(request, pk):
     forked = get_object_or_404(Recipe, pk=pk)
     serializer = RecipeRemixSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
+    title = serializer.validated_data.get("title") or forked.title
     remix = serializer.save(
         parent=forked,
         author=request.user,
-        title=forked.title,
+        title=title,
     )
     return Response(
         RecipeDetailSerializer(remix, context={"request": request}).data,

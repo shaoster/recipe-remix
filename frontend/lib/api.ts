@@ -94,7 +94,12 @@ export async function createRecipe(
 
 export async function remixRecipe(
   id: number,
-  input: { ingredients: string; steps: string; remix_note: string },
+  input: {
+    title?: string;
+    ingredients: string;
+    steps: string;
+    remix_note: string;
+  },
   token: string
 ): Promise<RecipeDetail> {
   const res = await request(`/recipes/${id}/remix/`, {

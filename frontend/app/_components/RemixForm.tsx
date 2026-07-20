@@ -19,6 +19,7 @@ export default function RemixForm({
 }) {
   const router = useRouter();
   const token = useAuthToken();
+  const [title, setTitle] = useState(forkedTitle);
   const [ingredients, setIngredients] = useState(initialIngredients);
   const [steps, setSteps] = useState(initialSteps);
   const [remixNote, setRemixNote] = useState("");
@@ -40,7 +41,7 @@ export default function RemixForm({
     try {
       const recipe = await remixRecipe(
         forkId,
-        { ingredients, steps, remix_note: remixNote },
+        { title, ingredients, steps, remix_note: remixNote },
         token as string
       );
       router.push(`/recipes/${recipe.id}`);
@@ -53,6 +54,15 @@ export default function RemixForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-full max-w-md text-left">
       <p className="text-sm text-zinc-500">Forking &quot;{forkedTitle}&quot;</p>
+      <label className="flex flex-col gap-1 text-sm">
+        Title
+        <input
+          className="border border-zinc-300 dark:border-zinc-700 rounded px-3 py-2 bg-transparent"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+      </label>
       <label className="flex flex-col gap-1 text-sm">
         Ingredients
         <textarea

@@ -61,9 +61,11 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
 
 class RecipeRemixSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(max_length=200, required=False, allow_blank=True)
+
     class Meta:
         model = Recipe
-        fields = ["ingredients", "steps", "remix_note"]
+        fields = ["title", "ingredients", "steps", "remix_note"]
 
 
 class FavoriteRecipeSerializer(serializers.ModelSerializer):
